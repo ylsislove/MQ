@@ -21,3 +21,8 @@
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
+
+AWS-SQS/aws-sqs-sample/.idea/
+AWS-SQS/aws-sqs-sample/target/
+ActiveMQ/带GUI的订阅者/activemq-demo/.idea/
+ActiveMQ/带GUI的订阅者/activemq-demo/target/

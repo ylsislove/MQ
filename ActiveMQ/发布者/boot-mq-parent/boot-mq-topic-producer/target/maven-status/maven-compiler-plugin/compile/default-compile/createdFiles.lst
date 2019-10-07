@@ -1,0 +1,3 @@
+com\yain\boot\activemq\topic\config\ConfigBean.class
+com\yain\boot\activemq\topic\Application.class
+com\yain\boot\activemq\topic\producer\TopicProducer.class

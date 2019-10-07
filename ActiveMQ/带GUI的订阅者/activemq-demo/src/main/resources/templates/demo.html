@@ -1,0 +1,145 @@
+﻿<!doctype html>
+<html lang="zh" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>小宇的订阅服务~~</title>
+
+    <script type="text/javascript" th:src="@{/js/jquery.min.js}"></script>
+    <script type="text/javascript" th:src="@{/lib/layui/layui.js}"></script>
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+    <link rel="stylesheet" th:href="@{/lib/layui/css/layui.css}">
+
+</head>
+<body>
+<!--<div class="button">-->
+<!--    <button><span>点击</span></button>-->
+<!--</div>-->
+
+<div class="pop-up">
+    <div class="content">
+        <div class="container">
+            <div class="dots">
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+            </div>
+
+<!--            <span class="close">关闭</span>-->
+            <span class="close">取消订阅</span>
+
+            <div class="title">
+                <h1>订阅</h1>
+            </div>
+
+            <img src="/img/cXsiNryL.png" alt="Car">
+
+            <div class="subscribe">
+                <h1>订阅获取最新消息和更新。</h1>
+                <form>
+                    <input type="email" id="email" placeholder="输入邮箱">
+                    <input type="button" onclick="submit_email()" value="订阅">
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" th:inline="javascript">
+
+    $('.pop-up').addClass('open');
+
+    var client = "";
+
+    var time_index = 0;
+
+    // 订阅
+    function submit_email() {
+        // 获取input中的数据
+        var email = $("#email").val();
+
+        if (email === "" || email === client)
+            return;
+
+        var url = "?email="+email;
+        // 用XMLHttpRequest发送请求
+        var xhr = new XMLHttpRequest();
+        // 初始化一个请求，第三个参数：是否异步处理
+        // xhr.open("get", [[@{~/submitEmail}]]+url, false);
+        xhr.open("get", "/submitEmail/" + url, false);
+        // 当发送成功后，回调的函数
+        xhr.onload = function() {
+            alert("订阅成功");
+            client = email;
+            time_index = setInterval(function() {
+                fnDate();
+            }, 1500);
+        };
+        // 发送请求
+        xhr.send();
+    }
+
+    // 取消订阅
+    $('.pop-up .close').click(function(){
+        // 获取input中的数据
+        var email = $("#email").val();
+        var url = "?email="+email;
+        // 用XMLHttpRequest发送请求
+        var xhr = new XMLHttpRequest();
+        // 初始化一个请求，第三个参数：是否异步处理
+        // xhr.open("get", [[@{~/submitEmail}]]+url, false);
+        xhr.open("get", "/close/" + url, false);
+        // 当发送成功后，回调的函数
+        xhr.onload = function() {
+            alert("已取消订阅");
+            client = "";
+            clearInterval(time_index);
+        };
+        // 发送请求
+        xhr.send();
+    });
+
+</script>
+
+<script>
+    // 向后端请求是否有消息传来
+    function fnDate() {
+
+        if (client === "")
+            return;
+
+        layui.use('layer', function () {
+            var layer = layui.layer;
+
+            $.ajax({
+                type: "get",
+                url: "/getMessage?email="+client,
+                success: function (data) {
+                    if (data !== "") {
+                        layer.msg(data, {icon: 1, time: 1500 })
+                    }
+                },
+                error: function (data) {
+                    client = "";
+                    layer.msg("接收失败", {icon: 5, time: 2000 })
+                }
+            });
+
+        });
+
+    }
+
+</script>
+
+<!--<script>-->
+<!--    $('button').click(function(){-->
+<!--        $('.pop-up').addClass('open');-->
+<!--    });-->
+
+<!--    $('.pop-up .close').click(function(){-->
+<!--        $('.pop-up').removeClass('open');-->
+<!--    });-->
+<!--</script>-->
+
+</body>
+</html>

@@ -1,0 +1,15 @@
+server:
+  port: 6666
+
+spring:
+  activemq:
+    broker-url: "tcp://129.211.10.165:61616"  # 自己的MQ服务器地址
+    user: admin
+    password: admin
+
+  jms:
+    pub-sub-domain: true   # false = Queue   true = Topic
+
+
+# 自己定义队列名称
+myTopic: topic-1
